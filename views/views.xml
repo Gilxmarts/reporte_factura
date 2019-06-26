@@ -1,0 +1,70 @@
+<odoo>
+  <data>
+    <template id="design_report_invoice" inherit_id="web.external_layout_standard">
+      <xpath expr="//div[hasclass('header')]" position="replace">
+        <div class="header">
+          <table style="border-top: 8px solid #f36306;">
+            <tr>
+              <td style="width:50%;">
+                <div style="text-align:center;border:1px solid;">
+                  <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                </div>
+              </td>
+              <td style="width:50%;background-color:#f1efee;padding:5px;">
+                <div name="company_address" style="border:1px solid;">
+                  <div t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}"/>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th style="background-color:#f36306;color:#fff;border-right:2px solid #fff; padding:5px;text-align:center;font-size:18pt;">
+                <h2>
+                  <span t-if="o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')">Invoice</span>
+                  <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                  <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                  <span t-if="o.type == 'out_refund'">Credit Note</span>
+                  <span t-if="o.type == 'in_refund'">Vendor Credit Note</span>
+                  <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
+                  <span t-field="o.number"/>
+                </h2>
+              </th>
+              <td style="background-color:#f36306;color:#fff;border-left:2px solid #fff;padding:5px;font-size:8pt;font-weight: 600;border:1px solid;">
+                <t t-call="web.address_layout"/>
+              </td>
+            </tr>  
+          </table>
+        </div> 
+      </xpath>
+    </template>
+
+    <template id="design_address_layout" inherit_id="web.address_layout">
+      <xpath expr="//div[hasclass('address')]" position="replace">
+        <div class="address">
+          <t t-if="information_block">
+              <t t-set="colclass" t-value="'col-5 offset-1'"/>
+              <div name="information_block" class="col-6">
+                  <t t-raw="information_block"/>
+              </div>
+          </t>
+          <div name="address">
+              <t t-raw="address"/>
+          </div>
+        </div>
+      </xpath>
+    </template>
+
+    <template id="design_report_invoice_document" inherit_id="account.report_invoice_document">
+      <xpath expr="//div[hasclass('page')]/h2" position="replace">
+        <h2> </h2>
+      </xpath>
+    </template>
+
+    <template id="design_external_layout_standard" inherit_id="web.external_layout_standard">
+      <xpath expr="//div[hasclass('article')]" position="replace">
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+          <t t-raw="0"/>
+        </div>
+      </xpath>
+    </template>
+  </data>
+</odoo>
